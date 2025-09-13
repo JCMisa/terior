@@ -1,11 +1,9 @@
-import ModeToggle from "@/components/custom/ModeToggle";
-import { Button } from "@/components/ui/button";
+import { NavbarComponent } from "@/components/custom/Navbar";
 
 export default function Home() {
   return (
-    <div>
-      <Button>Click Me</Button>
-      <ModeToggle />
+    <div className="relative">
+      <NavbarComponent />
     </div>
   );
 }
