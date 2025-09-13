@@ -34,3 +34,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Terior Metadata
+
+- title: Terior
+- Description: Instantly transform any room with Terior, the AI-powered room redesign app. Simply upload a photo and let our AI create stunning, personalized interior design concepts. Whether you're decorating a living room, bedroom, or office, Terior provides endless design inspiration, from modern minimalism to cozy bohemian. Get a glimpse of your dream home without the hassle.
+- Slogan: Design your interior, in seconds.
+- Primary color (darker): #FF6D00
+- Primary color (lighter): #FFA500
