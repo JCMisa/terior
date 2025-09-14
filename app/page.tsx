@@ -1,9 +1,20 @@
 import { NavbarComponent } from "@/components/custom/Navbar";
+import Hero from "../components/custom/Hero";
+import { getCurrentUser } from "@/lib/actions/users";
 
-export default function Home() {
+export default async function Home() {
+  const currentUser = await getCurrentUser();
+
+  let user;
+  if (currentUser && currentUser.success && currentUser.data) {
+    user = currentUser.data;
+  }
+
   return (
-    <div className="relative">
+    <main className="relative py-20 px-10">
       <NavbarComponent />
-    </div>
+
+      <Hero user={user as UserType} />
+    </main>
   );
 }

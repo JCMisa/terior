@@ -64,8 +64,8 @@ export const navItemsDashboard = [
     link: "/dashboard",
   },
   {
-    name: "History",
-    link: "/session/history",
+    name: "Explore",
+    link: "/explore",
   },
   {
     name: "Pricing",
