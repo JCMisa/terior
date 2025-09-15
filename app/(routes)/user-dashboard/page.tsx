@@ -8,6 +8,9 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { uploadToCloudinary } from "@/lib/cloudinary-browser";
+import { createRoom } from "@/lib/actions/rooms";
+import { showConfetti } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type Status =
   | "idle"
@@ -31,6 +34,8 @@ const STATUS_LABEL: Record<Status, string> = {
 };
 
 export default function UserDashboard() {
+  const router = useRouter();
+
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
 
@@ -71,7 +76,19 @@ export default function UserDashboard() {
       setOrigUrl(data.originalUrl);
       setRedesignedUrl(data.redesignedUrl);
 
-      // todo: save the orig url and redesigned url with the room name, and user design prompt to database
+      const saveToDb = await createRoom(
+        roomName,
+        userPrompt,
+        data.originalUrl,
+        data.description,
+        data.redesignedUrl,
+        data.redesigned
+      );
+      if (saveToDb?.success) {
+        toast.success(`${saveToDb.data} saved successfully!`);
+        showConfetti();
+        router.push(`/user-dashboard/room/${saveToDb.roomId}`);
+      }
       setStatus("done");
       toast.success("Redesign complete!");
     } catch (e) {
