@@ -15,6 +15,13 @@
       "when": 1757923147894,
       "tag": "0001_tense_natasha_romanoff",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758011467572,
+      "tag": "0002_many_miracleman",
+      "breakpoints": true
     }
   ]
 }

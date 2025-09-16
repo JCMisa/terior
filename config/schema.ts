@@ -1,4 +1,5 @@
 import {
+  boolean,
   integer,
   pgTable,
   text,
@@ -31,6 +32,7 @@ export const Rooms = pgTable("rooms", {
   originalRoomDescription: text("originalRoomDescription"),
   redesignedImageUrl: text("redesignedImageUrl"),
   redesignedRoomDescription: text("redesignedRoomDescription"),
+  public: boolean("public").default(false),
   createdAt: timestamp("createdAt")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),

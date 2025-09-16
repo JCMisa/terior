@@ -6,6 +6,7 @@ import { db } from "@/config/db";
 import { Rooms, Users } from "@/config/schema";
 import { getCurrentUser } from "./users";
 import { eq, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 // --------------------------- Helper Functions ---------------------------
 const getSessionUserId = async (): Promise<string> => {
@@ -71,5 +72,107 @@ export const createRoom = withErrorHandling(
         };
       }
     }
+  }
+);
+
+export const getRoom = withErrorHandling(async (roomId: number) => {
+  const isAuthenticated = await getSessionUserId();
+  const user = await getCurrentUser();
+
+  if (!isAuthenticated && !user) {
+    return {
+      success: false,
+      data: null,
+      error: "Unauthenticated",
+    };
+  }
+
+  const [data] = await db
+    .select()
+    .from(Rooms)
+    .where(eq(Rooms.id, roomId))
+    .limit(1);
+
+  if (data) {
+    return {
+      data: data,
+      success: true,
+    };
+  }
+  return {
+    data: null,
+    success: false,
+    error: "No room found",
+  };
+});
+
+export const updateRoomName = withErrorHandling(
+  async (roomId: number, updatedRoomName: string) => {
+    const isAuthenticated = await getSessionUserId();
+    const user = await getCurrentUser();
+
+    if (!isAuthenticated && !user) {
+      return {
+        success: false,
+        data: null,
+        error: "Unauthenticated",
+      };
+    }
+
+    const [data] = await db
+      .update(Rooms)
+      .set({
+        roomName: updatedRoomName,
+        updatedAt: new Date(),
+      })
+      .where(eq(Rooms.id, roomId))
+      .returning({ roomName: Rooms.roomName });
+
+    if (data) {
+      revalidatePath(`/user-dashboard/room/${roomId}`);
+      return {
+        data: data.roomName,
+        success: true,
+      };
+    }
+    return {
+      data: null,
+      success: false,
+      error: "No room found",
+    };
+  }
+);
+
+export const updateRoomDescription = withErrorHandling(
+  async (
+    roomId: number,
+    field: "originalRoomDescription" | "redesignedRoomDescription",
+    value: string
+  ) => {
+    const user = await getCurrentUser();
+    if (!user.success) return { success: false, error: "Unauthorized" };
+
+    await db
+      .update(Rooms)
+      .set({ [field]: value, updatedAt: new Date() })
+      .where(eq(Rooms.id, roomId));
+
+    revalidatePath(`/rooms/${roomId}`);
+    return { success: true };
+  }
+);
+
+export const setPublicAction = withErrorHandling(
+  async (roomId: number, public_: boolean) => {
+    const user = await getCurrentUser();
+    if (!user.success) return { success: false, error: "Unauthorized" };
+
+    await db
+      .update(Rooms)
+      .set({ public: public_, updatedAt: new Date() })
+      .where(eq(Rooms.id, roomId));
+
+    revalidatePath(`/rooms/${roomId}`);
+    return { success: true };
   }
 );

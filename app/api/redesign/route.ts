@@ -23,7 +23,7 @@ const isRoomPrompt =
 
 const describePrompt =
   "Describe this interior in one concise paragraph. " +
-  "Include: overall style, main furniture pieces, wall & floor finishes, lighting type, approximate size, dominant colours, and noticeable decorative elements.";
+  "Include: overall style, main furniture pieces, location of the furnitures, wall & floor finishes, lighting type, approximate size, dominant colours, and noticeable decorative elements.";
 
 const redesignInstruction = (
   roomName: string,

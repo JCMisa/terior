@@ -19,6 +19,7 @@ declare interface RoomType {
   originalRoomDescription?: string | null; // description of the not-designed room uploaded by user
   redesignedImageUrl?: string | null; // url image of the redesigned room provided by ai hf model
   redesignedRoomDescription?: string | null; // description of th redesigned room provided by gemini ai
+  public?: boolean | null;
   createdAt: Date;
   updatedAt: Date;
 }
