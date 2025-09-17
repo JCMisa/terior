@@ -106,6 +106,37 @@ export const getRoom = withErrorHandling(async (roomId: number) => {
   };
 });
 
+export const getUserRooms = withErrorHandling(async () => {
+  const isAuthenticated = await getSessionUserId();
+  const user = await getCurrentUser();
+
+  if (!isAuthenticated && !user) {
+    return {
+      success: false,
+      data: null,
+      error: "Unauthenticated",
+    };
+  }
+
+  const data = await db
+    .select()
+    .from(Rooms)
+    .where(eq(Rooms.createdBy, user.data?.email as string));
+
+  if (data) {
+    return {
+      data: data,
+      latest: data[0],
+      success: true,
+    };
+  }
+  return {
+    data: null,
+    success: false,
+    error: "No room found for this user",
+  };
+});
+
 export const updateRoomName = withErrorHandling(
   async (roomId: number, updatedRoomName: string) => {
     const isAuthenticated = await getSessionUserId();

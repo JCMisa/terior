@@ -1,3 +1,5 @@
+export const maxDuration = 90;
+
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { z } from "zod";

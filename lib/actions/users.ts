@@ -49,3 +49,22 @@ export const getUserByEmail = withErrorHandling(async (email: string) => {
     data: data[0],
   };
 });
+
+export const getUserCredits = withErrorHandling(async () => {
+  const data = await db
+    .select()
+    .from(Users)
+    .where(eq(Users.userId, await getSessionUserId()));
+
+  if (data.length === 0) {
+    return {
+      success: false,
+      data: null,
+    };
+  }
+
+  return {
+    success: true,
+    data: data[0].credits,
+  };
+});

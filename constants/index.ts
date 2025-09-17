@@ -61,7 +61,7 @@ export const navItemsHome = [
 export const navItemsDashboard = [
   {
     name: "Dashboard",
-    link: "/dashboard",
+    link: "/user-dashboard",
   },
   {
     name: "Explore",

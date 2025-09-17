@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { AxiosError } from "axios";
 
-export const api = axios.create({ baseURL: "/api", timeout: 80000 });
+export const api = axios.create({ baseURL: "/api", timeout: 90000 });
 
 /* narrow errors to our shape */
 export function getAxiosError(err: AxiosError<{ error?: string }>): string {

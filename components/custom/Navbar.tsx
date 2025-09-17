@@ -15,6 +15,8 @@ import { useState } from "react";
 import ModeToggle from "./ModeToggle";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { navItemsHome } from "@/constants";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function NavbarComponent({
   navItems = navItemsHome,
@@ -22,6 +24,7 @@ export function NavbarComponent({
   navItems?: { name: string; link: string }[];
 }) {
   const { user } = useUser();
+  const path = usePathname();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -31,7 +34,7 @@ export function NavbarComponent({
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
-          <NavItems items={navItems} />
+          <NavItems items={navItems} path={path} />
           <div className="flex items-center gap-4">
             <ModeToggle />
             {user ? (
@@ -68,7 +71,10 @@ export function NavbarComponent({
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
+                className={cn(
+                  "relative text-neutral-600 dark:text-neutral-300",
+                  path === item.link && "border-b border-b-primary"
+                )}
               >
                 <span className="block">{item.name}</span>
               </a>
