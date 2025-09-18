@@ -23,3 +23,12 @@ declare interface RoomType {
   createdAt: Date;
   updatedAt: Date;
 }
+
+declare interface SearchParams {
+  searchParams: Record<string, string | undefined>;
+}
+
+declare interface ParamsWithSearch {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string | undefined>>;
+}

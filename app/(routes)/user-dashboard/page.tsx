@@ -3,6 +3,7 @@ import DataCard from "./_components/DataCard";
 import CreateForm from "./_components/CreateForm";
 import { getUserCredits } from "@/lib/actions/users";
 import { getUserRooms } from "@/lib/actions/rooms";
+import { UserRoomsPerMonthChart } from "./_components/UserRoomsPerMonthChart";
 
 export default async function UserDashboard() {
   const [userCreditsRes, userRoomsRes] = await Promise.all([
@@ -49,6 +50,8 @@ export default async function UserDashboard() {
           link={`/user-dashboard/room/${latestRoomDesign?.id}`}
         />
       </div>
+
+      <UserRoomsPerMonthChart />
     </div>
   );
 }

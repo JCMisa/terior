@@ -1,11 +1,11 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { withErrorHandling } from "../utils";
+import { doesTitleMatch, withErrorHandling } from "../utils";
 import { db } from "@/config/db";
 import { Rooms, Users } from "@/config/schema";
 import { getCurrentUser } from "./users";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 // --------------------------- Helper Functions ---------------------------
@@ -131,7 +131,7 @@ export const getUserRooms = withErrorHandling(async () => {
     };
   }
   return {
-    data: null,
+    data: [],
     success: false,
     error: "No room found for this user",
   };
@@ -205,5 +205,62 @@ export const setPublicAction = withErrorHandling(
 
     revalidatePath(`/rooms/${roomId}`);
     return { success: true };
+  }
+);
+
+const roomWithUserInfo = () =>
+  db
+    .select({
+      room: Rooms,
+      user: {
+        id: Users.id,
+        name: Users.name,
+        image: Users.image,
+        email: Users.email,
+      },
+    })
+    .from(Rooms)
+    .leftJoin(Users, eq(Rooms.createdBy, Users.email));
+
+export const getAllRooms = withErrorHandling(
+  async (
+    searchQuery: string = "",
+    pageNumber: number = 1,
+    pageSize: number = 4
+  ) => {
+    const user = await getCurrentUser();
+    if (!user.success && !user.data)
+      return { success: false, error: "Unauthorized" };
+
+    const canSeeRooms = eq(Rooms.public, true);
+
+    const whereCondition = searchQuery.trim()
+      ? and(canSeeRooms, doesTitleMatch(Rooms, searchQuery))
+      : canSeeRooms;
+
+    // Total count for pagination
+    const [{ totalCount }] = await db
+      .select({ totalCount: sql<number>`count(*)` })
+      .from(Rooms)
+      .where(whereCondition);
+    const totalRooms = Number(totalCount || 0);
+    const totalPages = Math.ceil(totalRooms / pageSize);
+
+    // Fetch paginated, sorted results
+    const roomRecords = await roomWithUserInfo()
+      .where(whereCondition)
+      .orderBy(sql`${Rooms.createdAt} DESC`)
+      .limit(pageSize)
+      .offset((pageNumber - 1) * pageSize);
+
+    return {
+      rooms: roomRecords,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        totalRooms,
+        pageSize,
+      },
+    };
   }
 );

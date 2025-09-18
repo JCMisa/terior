@@ -65,7 +65,7 @@ export const navItemsDashboard = [
   },
   {
     name: "Explore",
-    link: "/explore",
+    link: "/user-dashboard/explore",
   },
   {
     name: "Pricing",
