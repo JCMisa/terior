@@ -11,7 +11,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="relative px-10 lg:px-0 ">
+    <main className="relative  ">
       <NavbarComponent />
 
       <Hero user={user as UserType} />

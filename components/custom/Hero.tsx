@@ -5,7 +5,7 @@ import { Spotlight } from "../ui/spotlight-new";
 
 const Hero = ({ user }: { user: UserType }) => {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-start justify-start overflow-hidden">
+    <div className="relative flex min-h-screen w-full flex-col items-start justify-start overflow-hidden px-10 lg:px-0">
       <Spotlight />
       <BackgroundRippleEffect />
       <div className="mt-32 w-full">
@@ -27,8 +27,8 @@ const Hero = ({ user }: { user: UserType }) => {
                 !user
                   ? "/sign-in"
                   : user.role === "admin"
-                  ? "/admin-dashboard"
-                  : "/user-dashboard"
+                    ? "/user-dashboard"
+                    : "/user-dashboard"
               }
               className="relative z-50"
             >
